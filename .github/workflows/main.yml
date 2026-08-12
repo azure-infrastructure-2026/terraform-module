@@ -30,3 +30,13 @@ jobs:
       - name: List Resource Groups
         run: |
           az group list --output table
+
+      - name: Create Resource Group
+        run: |
+          az group create \
+            --name rg-github-test \
+            --location centralindia
+
+      - name: List Resource Groups
+        run: |
+          az group list --output table
