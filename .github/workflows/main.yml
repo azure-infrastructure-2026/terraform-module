@@ -1,15 +1,15 @@
-name: Test Azure OIDC
+name: Terraform Deploy
 
 on:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
-  azure-login:
+  terraform:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./parent
 
     steps:
       - name: Checkout
@@ -18,25 +18,19 @@ jobs:
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Verify Azure Login
-        run: |
-          echo "Azure login successful"
-          az account show
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
 
-      - name: List Resource Groups
-        run: |
-          az group list --output table
+      - name: Terraform Init
+        run: terraform init
 
-      - name: Create Resource Group
-        run: |
-          az group create \
-            --name rg-github-test \
-            --location centralindia
+      - name: Terraform Validate
+        run: terraform validate
 
-      - name: List Resource Groups
-        run: |
-          az group list --output table
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
