@@ -1,10 +1,14 @@
-name: Terraform Deploy
+name: Test Azure OIDC
 
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  terraform:
+  test:
     runs-on: ubuntu-latest
 
     defaults:
@@ -12,7 +16,7 @@ jobs:
         working-directory: ./parent
 
     steps:
-      - name: Checkout
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Azure Login
@@ -22,17 +26,26 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Check Azure Login
+        run: |
+          echo "Azure authentication successful"
+          az account show
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
       - name: Terraform Init
-        run: terraform init
+        run: |
+          terraform init
 
       - name: Terraform Validate
-        run: terraform validate
+        run: |
+          terraform validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: |
+          terraform plan
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: |
+          terraform apply -auto-approve
