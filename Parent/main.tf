@@ -48,11 +48,11 @@ module "vmdemo" {
 
 
 
-module "bastion" {
-depends_on = [module.resource_group]
-  source = "../module/azurerm_bastion_host"
-  bastion  = var.bastion
-}
+# module "bastion" {
+# depends_on = [module.resource_group]
+#   source = "../module/azurerm_bastion_host"
+#   bastion  = var.bastion
+# }
 
 
 module "vnetpeer" {

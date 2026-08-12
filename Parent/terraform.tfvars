@@ -189,15 +189,15 @@ vmdemo = {
   }
 }
 
-bastion = {
-  bastionpublic = {
-    name                 = "pubbastion"
-    location             = "centralindia"
-    resource_group_name  = "rg-dev"
-    virtual_network_name = "vnetdemo1"
-    public_ip_address_id = "/subscriptions/5370b509-fed5-401b-a28f-6a8aa7263ccd/resourceGroups/rg-dev/providers/Microsoft.Network/publicIPAddresses/bastiopip"
-  }
-}
+# bastion = {
+#   bastionpublic = {
+#     name                 = "pubbastion"
+#     location             = "centralindia"
+#     resource_group_name  = "rg-dev"
+#     virtual_network_name = "vnetdemo1"
+#     public_ip_address_id = "/subscriptions/5370b509-fed5-401b-a28f-6a8aa7263ccd/resourceGroups/rg-dev/providers/Microsoft.Network/publicIPAddresses/bastiopip"
+#   }
+# }
 
 vnetpeer = {
   peer1 = {
