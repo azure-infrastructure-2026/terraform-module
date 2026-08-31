@@ -1,0 +1,136 @@
+```yaml
+trigger: none
+
+pool:
+  vmImage: 'azure-devops'
+
+variables:
+  terraformVersion: '1.8.8'
+  workingDirectory: '$(System.DefaultWorkingDirectory)/Parent'
+
+steps:
+
+# -------------------------------------------------
+# Checkout Repository
+# -------------------------------------------------
+- checkout: self
+  displayName: 'Checkout Repository'
+
+
+# -------------------------------------------------
+# Azure CLI - Service Connection Login
+# -------------------------------------------------
+- task: AzureCLI@2
+  displayName: 'Azure Login using Service Connection'
+  inputs:
+    azureSubscription: 'azure-devops-practice'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Azure authentication successful"
+      az account show
+
+
+# -------------------------------------------------
+# Setup Terraform
+# -------------------------------------------------
+- task: TerraformInstaller@1
+  displayName: 'Install Terraform'
+  inputs:
+    terraformVersion: '$(terraformVersion)'
+
+
+# -------------------------------------------------
+# Terraform Init
+# -------------------------------------------------
+- script: |
+    terraform init
+  displayName: 'Terraform Init'
+  workingDirectory: '$(workingDirectory)'
+
+
+# -------------------------------------------------
+# Terraform Validate
+# -------------------------------------------------
+- script: |
+    terraform validate
+  displayName: 'Terraform Validate'
+  workingDirectory: '$(workingDirectory)'
+
+
+# -------------------------------------------------
+# Install TFLint
+# -------------------------------------------------
+- bash: |
+    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+    tflint --version
+  displayName: 'Install TFLint'
+
+
+# -------------------------------------------------
+# Run TFLint
+# -------------------------------------------------
+- bash: |
+    tflint --init
+    tflint
+  displayName: 'Run TFLint'
+  workingDirectory: '$(workingDirectory)'
+
+
+# -------------------------------------------------
+# Install tfsec
+# -------------------------------------------------
+- bash: |
+    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+    tfsec --version
+  displayName: 'Install tfsec'
+
+
+# -------------------------------------------------
+# Run tfsec
+# -------------------------------------------------
+- bash: |
+    tfsec .
+  displayName: 'Run tfsec'
+  workingDirectory: '$(workingDirectory)'
+
+
+# -------------------------------------------------
+# Install Infracost
+# -------------------------------------------------
+- bash: |
+    curl -fsSL https://raw.githubusercontent.com/infracost/infracost/master/scripts/install.sh | sh
+    infracost --version
+  displayName: 'Install Infracost'
+
+
+# # -------------------------------------------------
+# # Infracost Breakdown
+# # -------------------------------------------------
+# - bash: |
+#     infracost breakdown \
+#       --path . \
+#       --format table
+#   displayName: 'Infracost - Estimate Infrastructure Cost'
+#   workingDirectory: '$(workingDirectory)'
+#   env:
+#     INFRACOST_API_KEY: $(INFRACOST_API_KEY)
+
+
+# -------------------------------------------------
+# Terraform Plan
+# -------------------------------------------------
+- script: |
+    terraform plan -out=tfplan
+  displayName: 'Terraform Plan'
+  workingDirectory: '$(workingDirectory)'
+
+
+# -------------------------------------------------
+# Terraform Apply
+# -------------------------------------------------
+- script: |
+    terraform apply -auto-approve tfplan
+  displayName: 'Terraform Apply'
+  workingDirectory: '$(workingDirectory)'
+```
