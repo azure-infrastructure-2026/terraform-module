@@ -6,7 +6,6 @@ variable "publicip" {}
 # variable "nsg_name" {}
 variable "nics" {}
 variable "vmdemo" {}
-# variable "bastion" {}
-variable "bastionsubnet" {}
+variable "bastion" {}
 variable "vnetpeer" {}
 variable "keyvault" {}

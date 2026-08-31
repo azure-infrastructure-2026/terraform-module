@@ -22,7 +22,7 @@ module "subnet" {
 }
 
 module "publicip" {
-  depends_on = [module.resource_group, module.subnet]
+  depends_on = [module.resource_group, module.virtual_network, module.subnet]
   source     = "../module/azurerm_public_ip"
   publicip   = var.publicip
 }
@@ -41,18 +41,18 @@ module "kvault" {
 
 
 module "vmdemo" {
-  depends_on = [module.nics, module.resource_group, module.subnet, module.publicip,module.kvault]
+  depends_on = [module.nics, module.resource_group, module.subnet, module.publicip, module.kvault]
   source     = "../module/azurerm_linux_virtual_machine"
   vmdemo     = var.vmdemo
 }
 
 
 
-# module "bastion" {
-# depends_on = [module.resource_group]
-#   source = "../module/azurerm_bastion_host"
-#   bastion  = var.bastion
-# }
+module "bastion" {
+  depends_on = [module.resource_group, module.subnet,module.publicip]
+  source     = "../module/azurerm_bastion_host"
+  bastion    = var.bastion
+}
 
 
 module "vnetpeer" {
