@@ -1,12 +1,9 @@
 rg_name = {
   rg1 = {
-    name     = "rg-dev"
+    name     = "rg-dev11"
     location = "centralindia"
   }
-    rg1 = {
-    name     = "rg-dev1"
-    location = "centralindia"
-  }
+
 }
 
 
