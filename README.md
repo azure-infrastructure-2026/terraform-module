@@ -5,3 +5,15 @@ Azure PR reviewer patch test new
 new test-AI foundry
 New PR test
 Azure AI Foundry Agent
+## AI DevSecOps PR Review
+
+This repository uses an automated Azure AI DevSecOps workflow to review Pull Requests.
+
+The workflow performs:
+
+- GitHub Pull Request webhook
+- Azure Function processing
+- Azure Storage Queue
+- Azure AI Foundry Agent
+- Terraform and security review
+- Automated review comment on the GitHub Pull Request
