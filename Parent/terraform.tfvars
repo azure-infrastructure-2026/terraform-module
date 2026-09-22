@@ -1,6 +1,6 @@
 rg_name = {
   rg1 = {
-    name     = "rg-pr-review2"
+    name     = "rg-pr-review3"
     location = "centralindia"
   }
 
