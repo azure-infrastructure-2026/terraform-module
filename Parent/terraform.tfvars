@@ -1,6 +1,6 @@
 rg_name = {
   rg1 = {
-    name     = "rg-dev11"
+    name     = "rg-test"
     location = "centralindia"
   }
 
